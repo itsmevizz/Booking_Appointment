@@ -1,0 +1,169 @@
+# **Backend Documentation: Node.js, Express, TypeScript & MongoDB**
+
+## **1. Project Overview**
+
+This is a Node.js backend API built using Express, TypeScript, and MongoDB. The API provides two endpoints to fetch and create users. It also includes Jest & Supertest for testing.
+
+## **2. Prerequisites**
+
+Before running this project, ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (v16 )
+- [MongoDB](https://www.mongodb.com/) (locally or using MongoDB Atlas)
+- [Postman](https://www.postman.com/) (optional, for API testing)
+
+## **3. Installation & Setup**
+
+### **Step 1: Clone the Repository**
+
+```bash
+git clone <repository-url>
+cd backend
+```
+
+### **Step 2: Install Dependencies**
+
+```bash
+npm install
+```
+
+### **Step 3: Setup Environment Variables**
+
+Create a `.env` file in the project root and add the following variables:
+
+```
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/mydb
+```
+
+> *Note: Update **`MONGO_URI`** if using MongoDB Atlas.*
+
+### **Step 4: Start MongoDB (If running locally)**
+
+```bash
+mongod
+```
+
+### **Step 5: Run the Server**
+
+```bash
+npm run dev
+```
+
+The server should now be running on `http://localhost:5000`.
+
+## **4. API Endpoints**
+
+### **1. Get All Users**
+
+- **Endpoint:** `GET /api/users`
+- **Response:**
+
+```json
+[
+  {
+    "_id": "6510c2d4e9f24e0023f9c8e0",
+    "name": "John Doe",
+    "email": "john@example.com"
+  }
+]
+```
+
+### **2. Create a New User**
+
+- **Endpoint:** `POST /api/users`
+- **Request Body:**
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+```
+
+- **Response:**
+
+```json
+{
+  "_id": "6510c2d4e9f24e0023f9c8e0",
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+```
+
+## **5. Running Tests**
+
+This project includes Jest & Supertest for API testing.
+
+Run tests with:
+
+```bash
+npm test
+```
+
+## **6. Integrating with Frontend**
+
+To integrate this backend with a frontend (React, Vue, Angular, etc.), follow these steps:
+
+### **Fetching Users in Frontend (React Example)**
+
+```tsx
+const fetchUsers = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/users");
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+  }
+};
+
+useEffect(() => {
+  fetchUsers();
+}, []);
+```
+
+### **Creating a New User from Frontend**
+
+```tsx
+const createUser = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: "Alice", email: "alice@example.com" }),
+    });
+    const data = await response.json();
+    console.log("User created:", data);
+  } catch (error) {
+    console.error("Error creating user:", error);
+  }
+};
+```
+
+## **7. Deployment**
+
+To deploy this backend:
+
+### **1. Build the Project**
+
+```bash
+npm run build
+```
+
+### **2. Run the Production Server**
+
+```bash
+npm start
+```
+
+### **3. Deploy on Cloud (Render, Vercel, AWS, etc.)**
+
+- Ensure `MONGO_URI` is updated to a cloud database.
+- Use a hosting platform like **Render**, **Heroku**, or **Vercel**.
+
+## **8. Conclusion**
+
+This backend is scalable, secure, and well-structured, making it easy to integrate with frontend applications. 🚀
