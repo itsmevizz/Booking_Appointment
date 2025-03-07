@@ -22,19 +22,22 @@ const AVAILABLE_SLOTS = [
 export const getAppointmentsByDate = async (req: Request, res: Response) => {
   try {
     const { date } = req.params;
-
+    // Fetch appointments for the given date
     const appointments = await Appointment.find({ date }).populate(
       "user",
       "name phone"
     );
 
+    // Extract booked slots
     const bookedSlots = appointments.map((appointment) => appointment.timeSlot);
 
-    const availableSlots = AVAILABLE_SLOTS.filter(
-      (slot) => !bookedSlots.includes(slot)
-    );
+    // Map all slots and mark booked ones as unavailable
+    const slots = AVAILABLE_SLOTS.map((slot) => ({
+      timeSlot: slot,
+      unavailable: bookedSlots.includes(slot), // Mark as unavailable if already booked
+    }));
 
-    res.json({ availableSlots });
+    res.json({ slots });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error." });

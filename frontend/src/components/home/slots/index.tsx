@@ -9,10 +9,11 @@ const TimeSlots: React.FC = () => {
   const {
     selectedDate,
     availableSlots,
-    selectedSlot,
+    selectedSlots,
     phone,
     username,
-    setSelectedSlot,
+    setSelectedSlots,
+    resetSelectedSlots,
     fetchSlots,
   } = useBookingStore();
   const [confirmingSlot, setConfirmingSlot] = useState<string | null>(null);
@@ -20,8 +21,8 @@ const TimeSlots: React.FC = () => {
   const [bookingLoading, setBookingLoading] = useState<boolean>(false); // New state for booking API call
 
   const handleSlotClick = (slot: string) => {
-    if (slot === selectedSlot) {
-      return;
+    if (selectedSlots.includes(slot)) {
+      return; // Prevent reselection of an already booked slot
     }
     setConfirmingSlot(slot === confirmingSlot ? null : slot);
   };
@@ -37,7 +38,7 @@ const TimeSlots: React.FC = () => {
         selectedDate as string,
         confirmingSlot
       );
-      setSelectedSlot(confirmingSlot);
+      setSelectedSlots(confirmingSlot);
       showSuccessToast(`Slot booked: ${confirmingSlot}`);
       setConfirmingSlot(null); // Reset confirmation button
     } catch {
@@ -49,7 +50,7 @@ const TimeSlots: React.FC = () => {
 
   useEffect(() => {
     const loadSlots = async () => {
-      setSelectedSlot("");
+      resetSelectedSlots();
       setConfirmingSlot("");
       setLoading(true);
       await fetchSlots(selectedDate as string);
@@ -75,18 +76,20 @@ const TimeSlots: React.FC = () => {
           ))
         ) : availableSlots.length > 0 ? (
           availableSlots.map((slot) => (
-            <div key={slot} className="flex gap-3 duration-300">
+            <div key={slot.timeSlot} className="flex gap-3 duration-300">
               <div
                 className={`p-2 pb-4 pt-4 border border-blue-400 text-blue-500 font-semibold rounded w-full text-center cursor-pointer ${
-                  selectedSlot === slot
+                  selectedSlots.includes(slot.timeSlot) || slot.unavailable
                     ? "bg-gray-200 border-gray-100 text-white"
                     : "hover:bg-blue-100"
                 }`}
-                onClick={() => handleSlotClick(slot)}
+                onClick={() =>
+                  !slot.unavailable && handleSlotClick(slot.timeSlot)
+                }
               >
-                <span>{slot}</span>
+                <span>{slot.timeSlot}</span>
               </div>
-              {confirmingSlot === slot && (
+              {confirmingSlot === slot.timeSlot && (
                 <div className="w-full">
                   <button
                     onClick={handleConfirm}

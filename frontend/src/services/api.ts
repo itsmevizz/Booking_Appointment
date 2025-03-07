@@ -8,7 +8,7 @@ export const getUsers = async () => {
 export const getAvailableSlots = async (date: string) => {
   try {
     const response = await apiClient.get(`/${date}`);
-    return response.data.availableSlots;
+    return response.data.slots;
   } catch (error) {
     console.error("Error fetching slots:", error);
     return [];

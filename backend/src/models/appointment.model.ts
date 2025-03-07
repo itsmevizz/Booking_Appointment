@@ -11,6 +11,7 @@ const AppointmentSchema = new Schema<Appointment>({
   date: { type: String, required: true },
   timeSlot: { type: String, required: true },
 });
+AppointmentSchema.index({ date: 1, timeSlot: 1 }, { unique: true });
 
 const Appointment = mongoose.model<Appointment>(
   "Appointment",
