@@ -1,14 +1,27 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  webpack: (config) => {
-    config.externals = {
-      react: "React",
-      "react-dom": "ReactDOM",
-    };
-    return config;
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET, OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "X-Requested-With, Content-Type",
+          },
+        ],
+      },
+    ];
   },
-  output: "standalone", // Ensures the app is packaged correctly for standalone deployment
 };
 
 export default nextConfig;

@@ -1,8 +1,10 @@
+import React from "react";
 import toast, { ToastPosition } from "react-hot-toast";
 
 // Track the current toast ID to prevent duplicates
 let activeToastId: string | null = null;
-// Utility function for success toasts
+
+// Success toast function
 export const showSuccessToast = (
   message: string,
   customToastId: string = "success",
@@ -28,8 +30,8 @@ export const showSuccessToast = (
   });
 };
 
-// Close button component using Tailwind CSS
-const CloseButton = ({ toastId }: { toastId: string }) => (
+// Close button component using Tailwind CSS and React.FC
+const CloseButton: React.FC<{ toastId: string }> = ({ toastId }) => (
   <button
     onClick={() => toast.dismiss(toastId)}
     className="ml-4 text-white text-lg focus:outline-none"
@@ -38,6 +40,7 @@ const CloseButton = ({ toastId }: { toastId: string }) => (
   </button>
 );
 
+// Error toast function
 export const showErrorToast = (
   error: string,
   customToastId: string = "error",
@@ -69,8 +72,8 @@ export const showErrorToast = (
           }
           duration-500 ease-out`}
         >
-          <span>{errorMessage}</span> {/* Ensure this is a string */}
-          <CloseButton toastId={t.id} /> {/* Close button */}
+          <span>{errorMessage}</span>
+          <CloseButton toastId={t.id} />
         </div>
       ),
       {
@@ -85,6 +88,7 @@ export const showErrorToast = (
   }
 };
 
+// Helper function to extract error message
 const getErrorMessage = (error: string): string => {
   try {
     if (typeof error === "string") {

@@ -1,5 +1,6 @@
+import HomeView from "../../views/home";
 import { createRoot } from "react-dom/client";
-import HomeView from "@/views/home";
+import * as React from "react"; // Make sure to import React explicitly
 
 const BookingWidget = (elementId: string) => {
   const container = document.getElementById(elementId);
@@ -7,14 +8,15 @@ const BookingWidget = (elementId: string) => {
     console.error(`Element with ID "${elementId}" not found.`);
     return;
   }
-
   const root = createRoot(container);
-  root.render(<HomeView />);
+  // Use the imported React to render
+  root.render(React.createElement(HomeView));
 };
 
-// ✅ Explicitly attach it to the `window` object
 if (typeof window !== "undefined") {
-  (window as any).BookingWidget = BookingWidget;
+  window.addEventListener("load", () => {
+    (window as any).BookingWidget = BookingWidget;
+  });
 }
 
-export default BookingWidget;
+export { BookingWidget };
